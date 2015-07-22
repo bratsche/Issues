@@ -87,12 +87,14 @@ namespace Issues
 			this.IssueTiles.SelectedItem = null;
 		}
 
-		public static readonly BindableProperty ViewModelProperty =
-			BindableProperty.Create<IssueListPage, IssueListViewModel> (x => x.ViewModel, default (IssueListViewModel));
 		public IssueListViewModel ViewModel {
 			get { return (IssueListViewModel)GetValue (ViewModelProperty); }
 			set { SetValue (ViewModelProperty, value); }
 		}
+
+		public static readonly BindableProperty ViewModelProperty =
+			BindableProperty.Create<IssueListPage, IssueListViewModel> (x => x.ViewModel, default (IssueListViewModel), BindingMode.OneWay);
+
 		object IViewFor.ViewModel {
 			get { return ViewModel; }
 			set { ViewModel = (IssueListViewModel)value; }

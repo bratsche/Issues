@@ -21,7 +21,7 @@ namespace Issues
 		}
 
 		public static readonly BindableProperty ViewModelProperty =
-			BindableProperty.Create<IssueTileView, IssueTileViewModel> (x => x.ViewModel, default (IssueTileViewModel));
+			BindableProperty.Create<IssueTileView, IssueTileViewModel> (x => x.ViewModel, default (IssueTileViewModel), BindingMode.OneWay);
 
 		object IViewFor.ViewModel {
 			get { return ViewModel; }
