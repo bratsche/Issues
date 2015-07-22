@@ -8,7 +8,9 @@
 			<ListView.ItemTemplate>
 				<DataTemplate>
 					<ViewCell>
-						<local:IssueTileView ViewModel="{Binding}" />
+						<StackLayout Padding="20,20,20,20" Orientation="Horizontal">
+							<Label Text="{Binding subject}" YAlign="Center" />
+						</StackLayout>
 					</ViewCell>
 				</DataTemplate>
 			</ListView.ItemTemplate>

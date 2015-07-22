@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Runtime.Serialization;
 using ReactiveUI;
 using Akavache;
@@ -14,12 +16,11 @@ namespace Issues
 		public ReactiveCommand<IssueList> Refresh { get; private set; }
 
 		public ReactiveCommand<object> ItemTapped { get; private set; }
-		[DataMember] public ReactiveList<Issue> Issues { get; private set; }
-		[DataMember] public IReactiveDerivedList<IssueTileViewModel> IssueTiles { get; private set; }
+		public ObservableCollection<Issue> Issues { get; private set; }
 
 		public IssueListViewModel ()
 		{
-			Issues = new ReactiveList<Issue> ();
+			Issues = new ObservableCollection<Issue> ();
 
 			var canRefresh = this.WhenAny (x => x.IsBusy, x => !x.Value);
 			Refresh = ReactiveCommand.CreateAsyncTask<IssueList> (canRefresh, async _ => {
@@ -40,19 +41,12 @@ namespace Issues
 			});
 			LoadIssues.Subscribe (x => {
 				Issues.Clear ();
-				Issues.AddRange (x.issues);
+				foreach (var i in x.issues) {
+					Issues.Add (i);
+				}
 				Issues.Add (new Issue { subject = "Test", description = "foobar", id = 5 });
-
-				System.Diagnostics.Debug.WriteLine ("There are {0} items in Issues", Issues.Count);
-				System.Diagnostics.Debug.WriteLine ("and {0} in IssueTiles", IssueTiles.Count);
 			});
 			LoadIssues.ThrownExceptions.Subscribe (ex => UserError.Throw ("Couldn't load issues", ex));
-
-			IssueTiles = Issues.CreateDerivedCollection (
-				x => new IssueTileViewModel (x),
-				x => !String.IsNullOrWhiteSpace (x.subject),
-				(x, y) => x.Model.id.CompareTo (y.Model.id)
-			);
 
 			BlobCache.UserAccount.GetObject<string> ("email")
 				.Where (x => !String.IsNullOrWhiteSpace (x))
@@ -60,10 +54,8 @@ namespace Issues
 		}
 	}
 
-	[DataContract]
 	public class IssueTileViewModel : ReactiveObject
 	{
-		[DataMember]
 		public Issue Model { get; private set; }
 
 		public IssueTileViewModel (Issue model)

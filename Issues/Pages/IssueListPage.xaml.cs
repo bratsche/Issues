@@ -55,7 +55,7 @@ namespace Issues
 				return email;
 			});
 
-			this.OneWayBind (ViewModel, vm => vm.IssueTiles, v => v.IssueTiles.ItemsSource);
+			this.OneWayBind (ViewModel, vm => vm.Issues, v => v.IssueTiles.ItemsSource);
 			this.OneWayBind (ViewModel, vm => vm.ItemTapped, v => v.ItemTappedCommand);
 			this.OneWayBind (ViewModel, vm => vm.Refresh, v => v.IssueTiles.RefreshCommand);
 			this.Bind (ViewModel, vm => vm.IsBusy, v => v.IssueTiles.IsRefreshing);
