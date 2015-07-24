@@ -13,7 +13,7 @@ namespace Issues
 
 		public NewIssuePage ()
 		{
-			BindingContext = new NewIssueViewModel ();
+			ViewModel = new NewIssueViewModel ();
 
 			Title = "New Issue";
 
