@@ -37,6 +37,10 @@ namespace Issues
 
 			this.Title = "Issues";
 
+			var newButton = new ToolbarItem { Text = "New" };
+			newButton.Clicked += (sender, e) => Navigation.PushAsync (new NewIssuePage ());
+			ToolbarItems.Add (newButton);
+
 			LoadEmail = ReactiveCommand.CreateAsyncTask<string> (async _ => {
 				var email = await BlobCache.UserAccount.GetOrFetchObject (
 					"email",
@@ -61,14 +65,6 @@ namespace Issues
 			this.Bind (ViewModel, vm => vm.IsBusy, v => v.IssueTiles.IsRefreshing);
 		}
 			
-//		protected override void OnBindingContextChanged ()
-//		{
-//			base.OnBindingContextChanged ();
-//
-//			RemoveBinding (ItemTappedCommandProperty);
-//			SetBinding (ItemTappedCommandProperty, new Binding (ItemTappedCommandPropertyName));
-//		}
-
 		protected override void OnAppearing ()
 		{
 			base.OnAppearing ();

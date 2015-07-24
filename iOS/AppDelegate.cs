@@ -5,6 +5,12 @@ using System.Linq;
 using Foundation;
 using UIKit;
 
+using XLabs;
+using XLabs.Ioc;
+using XLabs.Platform.Device;
+using XLabs.Platform.Services;
+using XLabs.Platform.Services.Media;
+
 using ReactiveUI;
 using Xamarin.Forms;
 
@@ -20,6 +26,13 @@ namespace Issues.iOS
 
 		public override bool FinishedLaunching (UIApplication app, NSDictionary options)
 		{
+			var resolverContainer = new SimpleContainer ();
+			resolverContainer.Register<IDevice> (t => AppleDevice.CurrentDevice)
+				.Register<IDisplay> (t => t.Resolve<IDevice> ().Display)
+				.Register<IMediaPicker, MediaPicker> ();
+
+			Resolver.SetResolver (resolverContainer.GetResolver ());
+
 			global::Xamarin.Forms.Forms.Init ();
 
 			RxApp.SuspensionHost.SetupDefaultSuspendResume ();
