@@ -181,6 +181,13 @@
     <BundleResource Include="Resources\Icon-Small-40.png" />
     <BundleResource Include="Resources\Icon-Small-40%402x.png" />
     <BundleResource Include="Resources\Icon-Small-40%403x.png" />
+    <BundleResource Include="Resources\camera-50.png" />
+    <BundleResource Include="Resources\medium-empty.png" />
+    <BundleResource Include="Resources\medium-filled.png" />
+    <BundleResource Include="Resources\normal-empty.png" />
+    <BundleResource Include="Resources\normal-filled.png" />
+    <BundleResource Include="Resources\urgent-empty.png" />
+    <BundleResource Include="Resources\urgent-filled.png" />
   </ItemGroup>
   <ItemGroup>
     <InterfaceDefinition Include="Resources\LaunchScreen.storyboard" />
