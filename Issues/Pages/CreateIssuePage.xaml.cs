@@ -58,6 +58,7 @@ namespace Issues
 
 			this.Bind (ViewModel, vm => vm.Subject, v => v.SubjectEntry.Text);
 			this.Bind (ViewModel, vm => vm.Description, v => v.DescriptionEditor.Text);
+			this.Bind (ViewModel, vm => vm.Location.name, v => v.LocationEntry.Text);
 			this.OneWayBind (ViewModel, vm => vm.PreviewSource, v => v.PreviewImage.Source);
 
 			Observable.FromEventPattern<FocusEventArgs> (x => this.LocationEntry.Focused += x, x => this.LocationEntry.Focused -= x)

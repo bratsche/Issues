@@ -26,9 +26,13 @@ namespace Issues
 			set { this.RaiseAndSetIfChanged (ref source, value); }
 		}
 
+		Location location;
+		public Location Location {
+			get { return location; }
+			set { this.RaiseAndSetIfChanged (ref location, value); }
+		}
 		public string Subject { get; set; }
 		public string Description { get; set; }
-		public Location Location { get; set; }
 
 		SelectedButtonType? selected_button;
 		public SelectedButtonType? SelectedButton {
