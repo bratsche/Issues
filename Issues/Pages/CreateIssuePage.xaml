@@ -1,0 +1,36 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms" xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" x:Class="Issues.CreateIssuePage">
+	<ContentPage.Content>
+		<StackLayout Padding="20, 20, 20, 20" VerticalOptions="Start" Orientation="Vertical">
+			<Grid VerticalOptions="FillAndExpand">
+				<Grid.RowDefinitions>
+					<RowDefinition Height="Auto" />
+					<RowDefinition Height="Auto" />
+				</Grid.RowDefinitions>
+
+				<Grid.ColumnDefinitions>
+					<ColumnDefinition Width="Auto" />
+					<ColumnDefinition Width="Auto" />
+					<ColumnDefinition Width="Auto" />
+				</Grid.ColumnDefinitions>
+
+				<Label Text="Subject" XAlign="End" YAlign="Center" TextColor="#777" Grid.Row="0" Grid.Column="0" />
+				<Entry x:Name="SubjectEntry" WidthRequest="220" Grid.Row="0" Grid.Column="1" />
+				<Image x:Name="CameraImage" Source="camera-50.png" WidthRequest="20" HeightRequest="20" Grid.Row="0" Grid.Column="2" />
+
+				<Label XAlign="End" YAlign="Center" Text="Location" TextColor="#777" Grid.Row="1" Grid.Column="0" />
+				<Entry x:Name="LocationEntry" WidthRequest="220" Grid.Row="1" Grid.Column="1" />
+			</Grid>
+
+			<StackLayout Orientation="Horizontal" Grid.Row="2">
+				<Button x:Name="NormalButton" Text="Normal" WidthRequest="100" TextColor="#468ee5" />
+				<Button x:Name="MediumButton" Text="Medium" WidthRequest="100" TextColor="#f59d00" />
+				<Button x:Name="UrgentButton" Text="Urgent" WidthRequest="100" TextColor="#dc3d06" />
+			</StackLayout>
+
+			<Image x:Name="PreviewImage" HeightRequest="300" />
+			<Label Text="Description" TextColor="#777" />
+			<Editor x:Name="DescriptionEditor" HeightRequest="60" BackgroundColor="#fafafa" />
+		</StackLayout>
+	</ContentPage.Content>
+</ContentPage>

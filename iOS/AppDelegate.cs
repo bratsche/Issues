@@ -34,6 +34,7 @@ namespace Issues.iOS
 			Resolver.SetResolver (resolverContainer.GetResolver ());
 
 			global::Xamarin.Forms.Forms.Init ();
+			global::Xamarin.FormsMaps.Init ();
 
 			RxApp.SuspensionHost.SetupDefaultSuspendResume ();
 

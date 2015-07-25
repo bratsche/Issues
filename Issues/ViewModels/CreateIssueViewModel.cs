@@ -15,16 +15,19 @@ using XLabs.Platform.Services.Media;
 
 namespace Issues
 {
-	public enum SelectedButtonType1 {
+	public enum SelectedButtonType {
 		Normal, Medium, Urgent
 	}
 
-	public class NewIssueViewModel : BaseViewModel
+	public class CreateIssueViewModel : BaseViewModel
 	{
-		public ImageSource Source {
+		public ImageSource PreviewSource {
 			get { return source; }
 			set { this.RaiseAndSetIfChanged (ref source, value); }
 		}
+
+		public string Subject { get; set; }
+		public string Description { get; set; }
 
 		SelectedButtonType? selected_button;
 		public SelectedButtonType? SelectedButton {
@@ -44,29 +47,47 @@ namespace Issues
 			get { return SelectedButton == SelectedButtonType.Urgent ? "urgent-filled.png" : "urgent-empty.png"; }
 		}
 
-		public NewIssueViewModel ()
+		public ReactiveCommand<object> SelectLocation { get; private set; }
+		public ReactiveCommand<object> NormalSelected { get; private set; }
+		public ReactiveCommand<object> MediumSelected { get; private set; }
+		public ReactiveCommand<object> UrgentSelected { get; private set; }
+
+		public CreateIssueViewModel ()
 		{
 			var device = Resolver.Resolve<IDevice> ();
 			mediaPicker = DependencyService.Get<IMediaPicker> () ?? device.MediaPicker;
 
 			this.WhenAny (x => x.SelectedButton, x => x.Value)
 				.Subscribe (x => {
-					this.RaisePropertyChanged<NewIssueViewModel> ("NormalButtonSource");
-					this.RaisePropertyChanged<NewIssueViewModel> ("MediumButtonSource");
-					this.RaisePropertyChanged<NewIssueViewModel> ("UrgentButtonSource");
+					this.RaisePropertyChanged<CreateIssueViewModel> ("NormalButtonSource");
+					this.RaisePropertyChanged<CreateIssueViewModel> ("MediumButtonSource");
+					this.RaisePropertyChanged<CreateIssueViewModel> ("UrgentButtonSource");
 				});
+
+			SelectLocation = ReactiveCommand.Create ();
+//			RadioSelected = ReactiveCommand.CreateAsyncTask<string> (async s => {
+//				System.Diagnostics.Debug.WriteLine ("RADIO {0}", s);
+//				return "foo";
+//			});
+
+			NormalSelected = ReactiveCommand.Create ();
+			NormalSelected.Subscribe (t => SelectedButton = SelectedButtonType.Normal);
+
+//			SelectLocation.Subscribe (t => {
+//				System.Diagnostics.Debug.WriteLine ("SELECT LOCATION");
+//			});
 		}
 
 		public async Task<MediaFile> TakePhoto ()
 		{
-			Source = null;
+			PreviewSource = null;
 
 			var options = new CameraMediaStorageOptions { DefaultCamera = CameraDevice.Rear, MaxPixelDimension = 300 };
 			return await mediaPicker.TakePhotoAsync (options).ContinueWith (t => {
 				if (!t.IsFaulted && !t.IsCanceled) {
 					var mediaFile = t.Result;
 
-					Source = ImageSource.FromStream (() => mediaFile.Source);
+					PreviewSource = ImageSource.FromStream (() => mediaFile.Source);
 					imageStream = mediaFile.Source;
 
 					return mediaFile;
@@ -78,7 +99,7 @@ namespace Issues
 
 		public async Task SelectPhoto ()
 		{
-			Source = null;
+			PreviewSource = null;
 
 			try {
 				var options = new CameraMediaStorageOptions {
@@ -87,7 +108,7 @@ namespace Issues
 				};
 
 				var file = await mediaPicker.SelectPhotoAsync (options);
-				Source = ImageSource.FromStream (() => file.Source);
+				PreviewSource = ImageSource.FromStream (() => file.Source);
 				imageStream = file.Source;
 			} catch (Exception) {
 			}

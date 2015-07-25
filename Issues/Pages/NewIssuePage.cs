@@ -87,13 +87,13 @@ namespace Issues
 
 
 			/* Buttons */
-			var normal = new Button { WidthRequest = 100, Text = "Normal", TextColor = Color.FromHex ("468ee5") };
-			var medium = new Button { WidthRequest = 100, Text = "Medium", TextColor = Color.FromHex ("f59d00") };
-			var urgent = new Button { WidthRequest = 100, Text = "Urgent", TextColor = Color.FromHex ("dc3d06") };
+			Normal = new Button { WidthRequest = 100, Text = "Normal", TextColor = Color.FromHex ("468ee5") };
+			Medium = new Button { WidthRequest = 100, Text = "Medium", TextColor = Color.FromHex ("f59d00") };
+			Urgent = new Button { WidthRequest = 100, Text = "Urgent", TextColor = Color.FromHex ("dc3d06") };
 
-			normal.SetBinding (Button.ImageProperty, "NormalButtonSource");
-			medium.SetBinding (Button.ImageProperty, "MediumButtonSource");
-			urgent.SetBinding (Button.ImageProperty, "UrgentButtonSource");
+			this.OneWayBind (ViewModel, vm => vm.NormalButtonSource, v => v.Normal.Image);
+			this.OneWayBind (ViewModel, vm => vm.MediumButtonSource, v => v.Medium.Image);
+			this.OneWayBind (ViewModel, vm => vm.UrgentButtonSource, v => v.Urgent.Image);
 
 			/* Image */
 			var image = new Image { HeightRequest = 300 };
@@ -112,7 +112,7 @@ namespace Issues
 					new StackLayout {
 						Orientation = StackOrientation.Horizontal,
 						Children = {
-							normal, medium, urgent
+							Normal, Medium, Urgent
 						}
 					},
 					image,
@@ -120,6 +120,10 @@ namespace Issues
 				}
 			};
 		}
+
+		public Button Normal { get; private set; }
+		public Button Medium { get; private set; }
+		public Button Urgent { get; private set; }
 
 		public NewIssueViewModel ViewModel {
 			get { return (NewIssueViewModel)GetValue (ViewModelProperty); }

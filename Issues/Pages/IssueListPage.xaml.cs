@@ -38,7 +38,7 @@ namespace Issues
 			this.Title = "Issues";
 
 			var newButton = new ToolbarItem { Text = "New" };
-			newButton.Clicked += (sender, e) => Navigation.PushAsync (new NewIssuePage ());
+			newButton.Clicked += (sender, e) => Navigation.PushAsync (new CreateIssuePage ());
 			ToolbarItems.Add (newButton);
 
 			LoadEmail = ReactiveCommand.CreateAsyncTask<string> (async _ => {
