@@ -65,17 +65,6 @@ namespace Issues
 				});
 
 			SelectLocation = ReactiveCommand.Create ();
-//			RadioSelected = ReactiveCommand.CreateAsyncTask<string> (async s => {
-//				System.Diagnostics.Debug.WriteLine ("RADIO {0}", s);
-//				return "foo";
-//			});
-
-			NormalSelected = ReactiveCommand.Create ();
-			NormalSelected.Subscribe (t => SelectedButton = SelectedButtonType.Normal);
-
-//			SelectLocation.Subscribe (t => {
-//				System.Diagnostics.Debug.WriteLine ("SELECT LOCATION");
-//			});
 		}
 
 		public async Task<MediaFile> TakePhoto ()
