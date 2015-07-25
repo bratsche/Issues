@@ -9,7 +9,6 @@ namespace Issues
 {
 	public class LocationPickerPage : ContentPage, IViewFor<LocationPickerViewModel>
 	{
-		//public event EventHandler<Location> LocationSelected;
 		public ReactiveCommand<object> LocationSelected { get; private set; }
 
 		public LocationPickerPage ()
@@ -39,10 +38,6 @@ namespace Issues
 				p.Clicked += (sender, e) => {
 					var loc = ((sender as Pin).BindingContext as Location);
 					LocationSelected.Execute (loc);
-//					if (LocationSelected != null) {
-//						var loc = ((sender as Pin).BindingContext as Location);
-//						LocationSelected (this, loc);
-//					}
 				};
 				map.Pins.Add (p);
 			}
