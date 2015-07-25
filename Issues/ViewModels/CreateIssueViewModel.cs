@@ -79,6 +79,7 @@ namespace Issues
 
 			SelectLocation = ReactiveCommand.Create ();
 
+			// This is for our toolbar 'Add' button.
 			var canFinish = this.WhenAny (
 				x => x.Subject, x => x.Description, x => x.Location, x => x.PreviewSource,
 				(subj, desc, loc, src) => !String.IsNullOrWhiteSpace (subj.Value) && !String.IsNullOrWhiteSpace (desc.Value) && loc.Value != null && src.Value != null

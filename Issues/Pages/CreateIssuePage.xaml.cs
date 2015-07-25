@@ -18,9 +18,12 @@ namespace Issues
 
 			ViewModel = new CreateIssueViewModel ();
 
+			// Toolbar 'Add' button
 			ToolbarAddButton = new ToolbarItem { Text = "Add" };
 			ToolbarItems.Add (ToolbarAddButton);
+			this.BindCommand (ViewModel, vm => vm.Finish, v => v.ToolbarAddButton);
 
+			// When the location entry is focused, let the user pick a location
 			this.ViewModel.SelectLocation.Subscribe (async t => {
 				var picker = new LocationPickerPage ();
 				picker.LocationSelected.Subscribe (loc => {
@@ -31,6 +34,10 @@ namespace Issues
 				await Navigation.PushModalAsync (picker);
 			});
 
+			Observable.FromEventPattern<FocusEventArgs> (x => this.LocationEntry.Focused += x, x => this.LocationEntry.Focused -= x)
+				.InvokeCommand (ViewModel.SelectLocation);
+
+			// When the user taps on the camera icon, prompt the user for camera or select photo
 			CameraImage.GestureRecognizers.Add (
 				new TapGestureRecognizer (
 					async (v, o) => {
@@ -51,8 +58,6 @@ namespace Issues
 				)
 			);
 
-			this.BindCommand (ViewModel, vm => vm.Finish, v => v.ToolbarAddButton);
-
 			NormalButton.Clicked += (o, e) => ViewModel.SelectedButton = SelectedButtonType.Normal;
 			MediumButton.Clicked += (o, e) => ViewModel.SelectedButton = SelectedButtonType.Medium;
 			UrgentButton.Clicked += (o, e) => ViewModel.SelectedButton = SelectedButtonType.Urgent;
@@ -65,9 +70,6 @@ namespace Issues
 			this.Bind (ViewModel, vm => vm.Description, v => v.DescriptionEditor.Text);
 			this.Bind (ViewModel, vm => vm.Location.name, v => v.LocationEntry.Text);
 			this.OneWayBind (ViewModel, vm => vm.PreviewSource, v => v.PreviewImage.Source);
-
-			Observable.FromEventPattern<FocusEventArgs> (x => this.LocationEntry.Focused += x, x => this.LocationEntry.Focused -= x)
-				.InvokeCommand (ViewModel.SelectLocation);
 		}
 
 		ToolbarItem ToolbarAddButton { get; set; }
