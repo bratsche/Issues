@@ -53,9 +53,6 @@ namespace Issues
 		}
 
 		public ReactiveCommand<object> SelectLocation { get; private set; }
-		public ReactiveCommand<object> NormalSelected { get; private set; }
-		public ReactiveCommand<object> MediumSelected { get; private set; }
-		public ReactiveCommand<object> UrgentSelected { get; private set; }
 
 		public CreateIssueViewModel ()
 		{
