@@ -18,17 +18,14 @@ namespace Issues
 
 			ViewModel = new CreateIssueViewModel ();
 
-			this.ViewModel.SelectLocation.Subscribe (t => {
+			this.ViewModel.SelectLocation.Subscribe (async t => {
 				var picker = new LocationPickerPage ();
-				Navigation.PushModalAsync (picker);
+				picker.LocationSelected.Subscribe (loc => {
+					ViewModel.Location = (Location)loc;
+					Navigation.PopModalAsync ();
+				});
 
-				// TODO
-				//var picker = new LocationPickerPage ();
-				// picker.LocationSelected.Subscribe (x => {
-				//        Navigation.PopModalAsync ();
-				//        ...
-				//  });
-				// Navigation.PushModalAsync (picker);
+				await Navigation.PushModalAsync (picker);
 			});
 
 			CameraImage.GestureRecognizers.Add (

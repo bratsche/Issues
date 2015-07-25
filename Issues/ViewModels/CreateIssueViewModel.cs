@@ -28,6 +28,7 @@ namespace Issues
 
 		public string Subject { get; set; }
 		public string Description { get; set; }
+		public Location Location { get; set; }
 
 		SelectedButtonType? selected_button;
 		public SelectedButtonType? SelectedButton {
