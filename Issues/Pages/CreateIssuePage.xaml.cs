@@ -18,6 +18,9 @@ namespace Issues
 
 			ViewModel = new CreateIssueViewModel ();
 
+			ToolbarAddButton = new ToolbarItem { Text = "Add" };
+			ToolbarItems.Add (ToolbarAddButton);
+
 			this.ViewModel.SelectLocation.Subscribe (async t => {
 				var picker = new LocationPickerPage ();
 				picker.LocationSelected.Subscribe (loc => {
@@ -48,6 +51,8 @@ namespace Issues
 				)
 			);
 
+			this.BindCommand (ViewModel, vm => vm.Finish, v => v.ToolbarAddButton);
+
 			NormalButton.Clicked += (o, e) => ViewModel.SelectedButton = SelectedButtonType.Normal;
 			MediumButton.Clicked += (o, e) => ViewModel.SelectedButton = SelectedButtonType.Medium;
 			UrgentButton.Clicked += (o, e) => ViewModel.SelectedButton = SelectedButtonType.Urgent;
@@ -64,6 +69,8 @@ namespace Issues
 			Observable.FromEventPattern<FocusEventArgs> (x => this.LocationEntry.Focused += x, x => this.LocationEntry.Focused -= x)
 				.InvokeCommand (ViewModel.SelectLocation);
 		}
+
+		ToolbarItem ToolbarAddButton { get; set; }
 
 		public CreateIssueViewModel ViewModel {
 			get { return (CreateIssueViewModel)GetValue (ViewModelProperty); }

@@ -31,8 +31,18 @@ namespace Issues
 			get { return location; }
 			set { this.RaiseAndSetIfChanged (ref location, value); }
 		}
-		public string Subject { get; set; }
-		public string Description { get; set; }
+
+		string subject;
+		public string Subject {
+			get { return subject; }
+			set { this.RaiseAndSetIfChanged (ref subject, value); }
+		}
+
+		string desc;
+		public string Description {
+			get { return desc; }
+			set { this.RaiseAndSetIfChanged (ref desc, value); }
+		}
 
 		SelectedButtonType? selected_button;
 		public SelectedButtonType? SelectedButton {
@@ -53,6 +63,7 @@ namespace Issues
 		}
 
 		public ReactiveCommand<object> SelectLocation { get; private set; }
+		public ReactiveCommand<object> Finish { get; private set; }
 
 		public CreateIssueViewModel ()
 		{
@@ -67,6 +78,13 @@ namespace Issues
 				});
 
 			SelectLocation = ReactiveCommand.Create ();
+
+			var canFinish = this.WhenAny (
+				x => x.Subject, x => x.Description, x => x.Location, x => x.PreviewSource,
+				(subj, desc, loc, src) => !String.IsNullOrWhiteSpace (subj.Value) && !String.IsNullOrWhiteSpace (desc.Value) && loc.Value != null && src.Value != null
+			);
+
+			Finish = ReactiveCommand.Create (canFinish);
 		}
 
 		public async Task<MediaFile> TakePhoto ()
