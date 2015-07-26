@@ -17,7 +17,27 @@ namespace Issues
 
 			LocationSelected = ReactiveCommand.Create ();
 
-			var map = BuildMap ();
+			var map = new Map ();
+
+			ViewModel.Locations.ItemsAdded.Subscribe (x => {
+				var pin = new Pin {
+					Label = x.name,
+					Type = PinType.Place,
+					Position = new Position (x.latitude, x.longitude),
+					BindingContext = x
+				};
+
+				pin.Clicked += (sender, e) => {
+					var location = ((sender as Pin).BindingContext as Location);
+					LocationSelected.Execute (location);
+				};
+
+				if (map.Pins.Count == 0) {
+					map.MoveToRegion (MapSpan.FromCenterAndRadius (pin.Position, Distance.FromMiles (0.25)));
+				}
+
+				map.Pins.Add (pin);
+			});
 
 			Content = new StackLayout {
 				Padding = new Thickness (20, 20, 20, 20),
@@ -25,24 +45,6 @@ namespace Issues
 					map
 				}
 			};
-		}
-
-		Map BuildMap ()
-		{
-			var pins = ViewModel.Locations.Select (l => new Pin { Label = l.name, Type = PinType.Place, Position = new Position (l.latitude, l.longitude), BindingContext = l });
-
-			var map = new Map (MapSpan.FromCenterAndRadius (pins.First().Position, Distance.FromMiles (0.25)));
-			map.IsShowingUser = true;
-
-			foreach (var p in pins) {
-				p.Clicked += (sender, e) => {
-					var loc = ((sender as Pin).BindingContext as Location);
-					LocationSelected.Execute (loc);
-				};
-				map.Pins.Add (p);
-			}
-
-			return map;
 		}
 
 		public LocationPickerViewModel ViewModel {
