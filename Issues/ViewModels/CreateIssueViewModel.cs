@@ -63,13 +63,15 @@ namespace Issues
 		}
 
 		public ReactiveCommand<object> SelectLocation { get; private set; }
-		public ReactiveCommand<object> Finish { get; private set; }
+		public ReactiveCommand<Issue> Finish { get; private set; }
 
 		public CreateIssueViewModel ()
 		{
 			var device = Resolver.Resolve<IDevice> ();
 			mediaPicker = DependencyService.Get<IMediaPicker> () ?? device.MediaPicker;
 
+			// TODO - move this into the view layer and get rid of all these button sources,
+			//        just update the images directly in the view layer.
 			this.WhenAny (x => x.SelectedButton, x => x.Value)
 				.Subscribe (x => {
 					this.RaisePropertyChanged<CreateIssueViewModel> ("NormalButtonSource");
@@ -85,7 +87,18 @@ namespace Issues
 				(subj, desc, loc, src) => !String.IsNullOrWhiteSpace (subj.Value) && !String.IsNullOrWhiteSpace (desc.Value) && loc.Value != null && src.Value != null
 			);
 
-			Finish = ReactiveCommand.Create (canFinish);
+			Finish = ReactiveCommand.CreateAsyncTask<Issue> (canFinish, async _ => {
+				var issue = new Issue {
+					location_id = Location.id,
+					subject = Subject,
+					description = Description
+				};
+
+				var api = RestService.For<IIssuesApi> ("http://localhost:3000/api");
+				var response = await api.CreateIssue (issue);
+
+				return await api.AddPhoto (response.id, imageStream);
+			});
 		}
 
 		public async Task<MediaFile> TakePhoto ()

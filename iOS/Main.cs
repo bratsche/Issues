@@ -18,4 +18,3 @@ namespace Issues.iOS
 		}
 	}
 }
-

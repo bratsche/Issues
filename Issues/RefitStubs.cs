@@ -5,6 +5,7 @@ using System.Linq;
 using System.IO;
 using System.Threading.Tasks;
 using Refit;
+using Newtonsoft.Json;
 
 /* ******** Hey You! *********
  *
@@ -56,16 +57,16 @@ namespace Issues
             return (Task<IssueList>) methodImpls["GetIssuesRaw"](Client, arguments);
         }
 
-        public virtual Task<Issue> CreateIssueRaw(Issue issue)
+        public virtual Task<string> CreateIssueRaw(Issue issue)
         {
             var arguments = new object[] { issue };
-            return (Task<Issue>) methodImpls["CreateIssueRaw"](Client, arguments);
+            return (Task<string>) methodImpls["CreateIssueRaw"](Client, arguments);
         }
 
-        public virtual Task<Issue> AddPhoto(int id,Stream stream)
+        public virtual Task<string> AddPhotoRaw(int id,Stream stream)
         {
             var arguments = new object[] { id,stream };
-            return (Task<Issue>) methodImpls["AddPhoto"](Client, arguments);
+            return (Task<string>) methodImpls["AddPhotoRaw"](Client, arguments);
         }
 
     }

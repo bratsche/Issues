@@ -3,6 +3,7 @@ using System.IO;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Refit;
+using Newtonsoft.Json;
 
 namespace Issues
 {
@@ -15,11 +16,11 @@ namespace Issues
 		Task<IssueList> GetIssuesRaw ();
 
 		[Post("/issues")]
-		Task<Issue> CreateIssueRaw ([Body] Issue issue);
+		Task<string> CreateIssueRaw ([Body] Issue issue);
 
 		[Multipart]
 		[Post("/issues/{id}/photo")]
-		Task<Issue> AddPhoto (int id, [AttachmentName ("image.jpg")] Stream stream);
+		Task<string> AddPhotoRaw (int id, [AttachmentName ("photo")] Stream stream);
 	}
 
 	public static class IssuesApiExtensions
@@ -37,6 +38,22 @@ namespace Issues
 
 			return ret;
 		}
+
+		public static async Task<Issue> CreateIssue (this IIssuesApi This, Issue issue)
+		{
+			var json = await This.CreateIssueRaw (issue);
+			var response = JsonConvert.DeserializeObject<CreateIssueResponse> (json);
+
+			return response.issue;
+		}
+
+		public static async Task<Issue> AddPhoto (this IIssuesApi This, int id, Stream stream)
+		{
+			var json = await This.AddPhotoRaw (id, stream);
+			var response = JsonConvert.DeserializeObject<CreateIssueResponse> (json);
+
+			return response.issue;
+		}
 	}
 
 	public enum Urgency
@@ -46,6 +63,11 @@ namespace Issues
 		Emergency
 	}
 
+	public class CreateIssueResponse
+	{
+		public Issue issue { get; set; }
+	}
+
 	public class Issue
 	{
 		public int id { get; set; }
@@ -53,6 +75,7 @@ namespace Issues
 		public int location_id { get; set; }
 		public string subject { get; set; }
 		public string description { get; set; }
+		public string photo_url { get; set; }
 	}
 
 	public class IssueList
