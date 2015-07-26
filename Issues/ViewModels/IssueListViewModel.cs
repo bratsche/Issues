@@ -44,7 +44,6 @@ namespace Issues
 				foreach (var i in x.issues) {
 					Issues.Add (i);
 				}
-				Issues.Add (new Issue { subject = "Test", description = "foobar", id = 5 });
 			});
 			LoadIssues.ThrownExceptions.Subscribe (ex => UserError.Throw ("Couldn't load issues", ex));
 
