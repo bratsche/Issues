@@ -44,8 +44,6 @@
     <Compile Include="Pages\LoginPage.xaml.cs">
       <DependentUpon>LoginPage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Pages\NewIssuePage.cs" />
-    <Compile Include="ViewModels\NewIssueViewModel.cs" />
     <Compile Include="Pages\CreateIssuePage.xaml.cs">
       <DependentUpon>CreateIssuePage.xaml</DependentUpon>
     </Compile>
